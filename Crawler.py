@@ -8,7 +8,9 @@ import os
 def main():
     crawler = Dcardcrawler()
     crawler.crawl_posts(board="talk")
-
+    # articles = crawler.open_data("talk")
+    # a = map(crawler.get_post_response,[p['id'] for p in articles][0:5])
+    # print(len(a))
 class Dcardcrawler(object):
     root_url = "https://www.dcard.tw/_api/"
     hdr = {'User-Agent': 'Mozilla/5.0'}
@@ -76,6 +78,21 @@ class Dcardcrawler(object):
                 [final.append(self.get_req(p)) for p in allid]
                 self.output(self.board,final)
                 print("Already crawl "+str(len(final))+" articles")
+    def get_post_response(self,id):
+        url = "https://www.dcard.tw/_api/posts/"+str(id)+"/comments"
+        m3  = self.get_req(url)
+        if len(m3)==30:
+            c_num = 0
+            result = []
+            while len(m3)==30:
+                [result.append(a) for a in m3]
+                m3 = self.get_req(p_id+"/comments?after="+str(c_num))
+                print("Already crawl "+str(len(result))+" comments")
+            return(result)
+        else:
+            print("Already crawl "+str(len(m3))+" comments")
+            return(m3)
+
         #for t in result:
         #    final.append(t)
         #for i in range(self.page):

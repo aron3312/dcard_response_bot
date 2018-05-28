@@ -1,2 +1,3 @@
-"# dcard_crawler" 
-"# dcard_response_bot" 
+#Dcard_response_Bot
+
+##First Use Crawler to crawl post and comments data
