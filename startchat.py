@@ -16,11 +16,11 @@ from get_query_data import get_queryset
 from bm25 import bm25_model
 from itertools import chain
 import random
-def main():
 
+def main():
     chatter = DcardBot()
     #chatter.randomTalks(num=1000)
-    chatter.chatTime()
+    chatter.chatTime(board=sys.argv[1])
 
 
 class DcardBot(object):
@@ -29,7 +29,9 @@ class DcardBot(object):
     Dcard回復機器人
     """
 
-    def chatTime(self):
+    def chatTime(self,board):
+        print(u"Dcard Bot: 您好，稍等一下確認語詞庫")
+        D_card_corpus().from_articles_get_corpus(board)
         print(u"Dcard Bot: 您好，請輸入想要回復的網址，我會幫您找出一個較好的回覆")
         while True:
             url =  raw_input("Dcard article url ")
@@ -45,7 +47,7 @@ class DcardBot(object):
             try:
                 title = get_queryset().crawl_post_from_url(url)[0]
                 print(u"Dcard Bot：您所想要回復的文章標題為："+title)
-                print("Dcard Bot: " +random.choice(self.getResponse(board="dressup",url=url)).encode("BIG5","ignore"))
+                print("Dcard Bot: " +random.choice(self.getResponse(board=board,url=url)).encode("BIG5","ignore"))
             except:
                 print(u"Dcard Bot：這個網址找不到結果")
 

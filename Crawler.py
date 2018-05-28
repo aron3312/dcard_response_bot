@@ -7,7 +7,8 @@ import os
 
 def main():
     crawler = Dcardcrawler()
-    crawler.crawl_posts(board="talk")
+
+    crawler.crawl_posts(board=sys.argv[1])
     # articles = crawler.open_data("talk")
     # a = map(crawler.get_post_response,[p['id'] for p in articles][0:5])
     # print(len(a))

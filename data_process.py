@@ -20,11 +20,12 @@ class D_card_corpus(object):
             articles = json.load(json_data)
         return articles
     def tokenization(self,text):
-        result = []
+        # result = []
         words = pseg.cut(text)
-        for word, flag in words:
-            if flag not in self.stop_flag and word not in self.stopwords:
-                result.append(word)
+        result = [word for word, flag in words if flag not in self.stop_flag and word not in self.stopwords]
+        # for word, flag in words:
+        #     if flag not in self.stop_flag and word not in self.stopwords:
+        #         result.append(word)
         return result
     def from_articles_get_corpus(self,board):
         """
@@ -33,13 +34,14 @@ class D_card_corpus(object):
         articles = self.open_data(board)
         articles_content = [c['content'] for c in articles]
         if os.path.exists(board+"_corpus.pkl"):
+            print(u"已有語詞庫，正在為您找尋答案")
             with open(board+'_corpus.pkl', 'rb') as pickle_load:
                 self.corpus = pickle.load(pickle_load)
             return self.corpus
         else:
-            articles_content = articles_content[1:800]
+            print(u"尚無語詞庫，開始抽取語詞")
             for f in articles_content:
-                print(u"已經加入了"+str(len(self.corpus))+u"則貼文進入詞庫")
+                print(u"總共有"+str(len(articles_content))+u"個貼文，"+u"已經加入了"+str(len(self.corpus))+u"則貼文進入詞庫")
                 self.corpus.append(self.tokenization(f))
             print("Finish append")
             with open(board+'_corpus.pkl', 'wb') as pickle_file:
